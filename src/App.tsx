@@ -323,7 +323,7 @@ export default function App() {
               cta: "Book a Collab",
             },
             {
-              tag: "Standard Photo", price: "$750", period: "per month",
+              tag: "Standard Photo", price: "$500", period: "per month",
               contract: "Min. 3 month contract", featured: false,
               items: [
                 "Influencer outreach & coordination",
@@ -344,8 +344,8 @@ export default function App() {
                 "Photo posts, video reels & stories",
                 "Ad marketing with targeting strategy",
                 "Monthly insights & consulting",
-                "2 photo + video shoots/month (~5hrs)",
-                "12+ hours of editing",
+                "3 photo + video shoots/month (~8hrs)",
+                "15+ hours of editing",
               ],
               cta: "Get Started",
             },
@@ -392,14 +392,47 @@ export default function App() {
                 Get in touch with Jack & Annie and let's start turning your restaurant
                 into a social media destination.
               </p>
-              <a href="mailto:misomarketinggroup@gmail.com" className="cta-btn">
-                Let's Talk →
-              </a>
+              <div className="contact-form">
+                <input
+                  type="text"
+                  className="contact-input"
+                  placeholder="Your name"
+                  id="contactName"
+                />
+                <input
+                  type="email"
+                  className="contact-input"
+                  placeholder="Your email"
+                  id="contactEmail"
+                />
+                <input
+                  type="text"
+                  className="contact-input"
+                  placeholder="Restaurant name"
+                  id="contactRestaurant"
+                />
+                <textarea
+                  className="contact-input contact-textarea"
+                  placeholder="Tell us about your restaurant and goals..."
+                  id="contactMessage"
+                  rows={4}
+                />
+                <button
+                  className="cta-btn"
+                  onClick={() => {
+                    const name = (document.getElementById("contactName") as HTMLInputElement).value;
+                    const email = (document.getElementById("contactEmail") as HTMLInputElement).value;
+                    const restaurant = (document.getElementById("contactRestaurant") as HTMLInputElement).value;
+                    const message = (document.getElementById("contactMessage") as HTMLTextAreaElement).value;
+                    const subject = encodeURIComponent(`Inquiry from ${name} — ${restaurant}`);
+                    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nRestaurant: ${restaurant}\n\n${message}`);
+                    window.location.href = `mailto:misomarketinggroup@gmail.com?subject=${subject}&body=${body}`;
+                  }}
+                >
+                  Send Message →
+                </button>
+              </div>
               <div className="cta-links">
-                <a href="https://www.instagram.com/itsjackandannie" target="_blank" rel="noopener noreferrer">
-                  📷 @itsjackandannie
-                </a>
-                <span style={{ color: "rgba(255,255,255,.3)" }}>·</span>
                 <span>📍 San Jose, CA</span>
               </div>
             </FadeUp>
@@ -428,7 +461,6 @@ export default function App() {
             <h4>Services</h4>
             <a href="#" onClick={(e) => { e.preventDefault(); scrollTo("pricing"); }}>Photography</a>
             <a href="#" onClick={(e) => { e.preventDefault(); scrollTo("pricing"); }}>Video Production</a>
-            <a href="#" onClick={(e) => { e.preventDefault(); scrollTo("pricing"); }}>Social Media</a>
             <a href="#" onClick={(e) => { e.preventDefault(); scrollTo("pricing"); }}>Influencer Marketing</a>
           </div>
           <div className="footer-col">
