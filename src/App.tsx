@@ -396,8 +396,8 @@ export default function App() {
                 Let's Talk →
               </a>
               <div className="cta-links">
-                <a href="https://www.instagram.com/misomarketinggroup" target="_blank" rel="noopener noreferrer">
-                  📷 @misomarketinggroup
+                <a href="https://www.instagram.com/itsjackandannie" target="_blank" rel="noopener noreferrer">
+                  📷 @itsjackandannie
                 </a>
                 <span style={{ color: "rgba(255,255,255,.3)" }}>·</span>
                 <span>📍 San Jose, CA</span>
@@ -433,8 +433,8 @@ export default function App() {
           </div>
           <div className="footer-col">
             <h4>Connect</h4>
-            <a href="https://www.instagram.com/misomarketinggroup" target="_blank" rel="noopener noreferrer">Instagram</a>
-            <a href="https://www.tiktok.com/@misomarketinggroup" target="_blank" rel="noopener noreferrer">TikTok</a>
+            <a href="https://www.instagram.com/itsjackandannie" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://www.tiktok.com/@itsjackandannie" target="_blank" rel="noopener noreferrer">TikTok</a>
             <a href="mailto:misomarketinggroup@gmail.com">Email Us</a>
           </div>
         </div>
