@@ -2,12 +2,12 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
 
 // Import images
-import heroImg from "./assets/marketing pictures/bayarea1.jpg";
+import heroImg from "./assets/marketing pictures/bayarea10.jpg";
 import gallery1 from "./assets/marketing pictures/bayarea3.jpg";
 import gallery2 from "./assets/marketing pictures/bayarea5.jpg";
 import gallery3 from "./assets/marketing pictures/bayarea7.jpg";
 import gallery4 from "./assets/marketing pictures/bayarea9.jpg";
-import gallery5 from "./assets/marketing pictures/bayarea10.jpg";
+import gallery5 from "./assets/marketing pictures/bayarea1.jpg";
 import gallery6 from "./assets/marketing pictures/bayarea12.jpg";
 import gallery7 from "./assets/marketing pictures/bayarea14.jpg";
 import gallery8 from "./assets/marketing pictures/bayarea16.jpg";
