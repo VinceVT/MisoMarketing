@@ -134,7 +134,7 @@ export default function App() {
           <li><a onClick={() => navClick("gallery")}>Portfolio</a></li>
           <li><a onClick={() => navClick("about")}>About</a></li>
           <li><a onClick={() => navClick("why")}>Why Us</a></li>
-          <li><a onClick={() => navClick("pricing")}>Pricing</a></li>
+          <li><a onClick={() => navClick("pricing")}>Services</a></li>
           <li><a className="nav-cta" onClick={() => navClick("contact")}>Get Started</a></li>
         </ul>
         <button className="nav-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
@@ -304,14 +304,14 @@ export default function App() {
         <FadeUp>
           <div className="section-label" style={{ justifyContent: "center" }}>Our Plans</div>
         </FadeUp>
-        <FadeUp><h2>Simple pricing, serious results.</h2></FadeUp>
+        <FadeUp><h2>Plans built for restaurants.</h2></FadeUp>
         <FadeUp>
           <p>From a single collaboration to full-service management — pick the plan that fits your restaurant.</p>
         </FadeUp>
         <div className="pricing-grid">
           {[
             {
-              tag: "One-Time", price: "$200", period: "per post",
+              tag: "One-Time", title: "Standard Collaboration",
               contract: "No contract required", featured: false,
               items: [
                 "1 post on our influencer IG & TikTok",
@@ -320,10 +320,10 @@ export default function App() {
                 "In-person photo & video shoot (~1hr)",
                 "3+ hours of professional editing",
               ],
-              cta: "Book a Collab",
+              cta: "Inquire",
             },
             {
-              tag: "Standard Photo", price: "$500", period: "per month",
+              tag: "Monthly", title: "Standard Photo Package",
               contract: "Min. 3 month contract", featured: false,
               items: [
                 "Influencer outreach & coordination",
@@ -333,10 +333,10 @@ export default function App() {
                 "2 in-person photo shoots/month (~3hrs)",
                 "6+ hours of editing",
               ],
-              cta: "Get Started",
+              cta: "Inquire",
             },
             {
-              tag: "Most Popular", price: "$1,000", period: "per month",
+              tag: "Most Popular", title: "Standard Media Package",
               contract: "Min. 3 month contract", featured: true,
               items: [
                 "Influencer outreach & coordination",
@@ -347,10 +347,10 @@ export default function App() {
                 "3 photo + video shoots/month (~8hrs)",
                 "15+ hours of editing",
               ],
-              cta: "Get Started",
+              cta: "Inquire",
             },
             {
-              tag: "Premium", price: "$1,500", period: "per month",
+              tag: "Premium", title: "Premium Media Package",
               contract: "Min. 3 month contract", featured: false,
               items: [
                 "Influencer outreach & event planning",
@@ -361,14 +361,13 @@ export default function App() {
                 "On-call shoots 4+ times/month (~15hrs)",
                 "25+ hours of editing",
               ],
-              cta: "Get Started",
+              cta: "Inquire",
             },
           ].map((plan, i) => (
             <FadeUp key={i} delay={i * 0.1}>
               <div className={`pricing-card ${plan.featured ? "featured" : ""}`}>
                 <span className="pricing-tag">{plan.tag}</span>
-                <div className="pricing-price">{plan.price}</div>
-                <div className="pricing-period">{plan.period}</div>
+                <div className="pricing-title">{plan.title}</div>
                 <div className="pricing-contract">{plan.contract}</div>
                 <ul className="pricing-list">
                   {plan.items.map((item, j) => <li key={j}>{item}</li>)}
@@ -380,6 +379,60 @@ export default function App() {
             </FadeUp>
           ))}
         </div>
+      </section>
+
+      {/* Website Design */}
+      <section className="web-design" id="webdesign">
+        <FadeUp>
+          <div className="section-label" style={{ justifyContent: "center" }}>Website Design</div>
+        </FadeUp>
+        <FadeUp><h2>Your restaurant deserves a website that works as hard as you do.</h2></FadeUp>
+        <FadeUp>
+          <p>We build beautiful, mobile-first websites designed to turn visitors into diners.</p>
+        </FadeUp>
+        <div className="web-design-grid">
+          {[
+            {
+              icon: "🎨", title: "Custom Design",
+              desc: "Tailored to your brand — not a cookie-cutter template. Every site we build is unique to your restaurant's identity and vibe.",
+            },
+            {
+              icon: "📱", title: "Mobile-First",
+              desc: "Over 70% of your customers find you on their phones. Your site will look stunning on every screen size.",
+            },
+            {
+              icon: "🔍", title: "SEO & Google",
+              desc: "We optimize for local search so customers in your area find you first. Google Business integration included.",
+            },
+            {
+              icon: "🍽️", title: "Menu & Ordering",
+              desc: "Beautiful menu pages, reservation links, online ordering integration — everything your diners need in one place.",
+            },
+            {
+              icon: "📸", title: "Photo Integration",
+              desc: "Your food photography front and center. We showcase your dishes the way they deserve to be seen.",
+            },
+            {
+              icon: "⚡", title: "Fast & Reliable",
+              desc: "Lightning-fast load times, SSL security, and reliable hosting. We handle the tech so you don't have to.",
+            },
+          ].map((feat, i) => (
+            <FadeUp key={i} delay={i * 0.08}>
+              <div className="web-design-card">
+                <div className="web-design-icon">{feat.icon}</div>
+                <h4>{feat.title}</h4>
+                <p>{feat.desc}</p>
+              </div>
+            </FadeUp>
+          ))}
+        </div>
+        <FadeUp>
+          <div style={{ textAlign: "center", marginTop: "3rem" }}>
+            <button className="btn-primary" onClick={() => scrollTo("contact")}>
+              Get a Quote →
+            </button>
+          </div>
+        </FadeUp>
       </section>
 
       {/* CTA */}
