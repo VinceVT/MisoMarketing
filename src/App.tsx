@@ -62,6 +62,26 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Visitors coming from /portfolio.html arrive on a URL like /#contact. The
+  // browser does its own fragment scroll while parsing, before React has
+  // rendered anything, so the target does not exist yet and the page just sits
+  // at the top. Scroll to it once the section is actually on the page.
+  useEffect(() => {
+    const id = window.location.hash.slice(1);
+    if (!id) return;
+
+    const jump = () => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "instant", block: "start" });
+    };
+
+    jump();
+    // Images above the target have no intrinsic size, so the page grows as they
+    // load and the first jump lands short. Correct it once everything is in.
+    if (document.readyState === "complete") return;
+    window.addEventListener("load", jump);
+    return () => window.removeEventListener("load", jump);
+  }, []);
+
   const handleScroll = useCallback(() => {
     setScrolled(window.scrollY > 50);
   }, []);
