@@ -152,12 +152,45 @@ def _interstitial_url(blob: bytes) -> str | None:
 # ───────────────────────── conversion ─────────────────────────
 
 
+IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".webp", ".tif", ".tiff"}
+
+
+def collect_from_dir(folder: Path) -> list[dict]:
+    """Take every image in a folder, in filename order.
+
+    This is the path to use when the photos did not come from the Drive folder
+    in portfolio-photos.json. Alt text comes from an optional alt.json sitting
+    beside them, mapping filename to its description:
+
+        { "1.jpg": "Garlic bread with herb oil", "2.jpg": "..." }
+    """
+    alt_map: dict[str, str] = {}
+    alt_file = folder / "alt.json"
+    if alt_file.exists():
+        alt_map = json.loads(alt_file.read_text(encoding="utf-8"))
+
+    photos = []
+    for path in sorted(folder.iterdir(), key=lambda p: p.name.lower()):
+        if path.suffix.lower() not in IMAGE_SUFFIXES:
+            continue
+        entry = {"file": path.name, "path": path}
+        if path.name in alt_map:
+            entry["alt"] = alt_map[path.name]
+        photos.append(entry)
+    return photos
+
+
 def slugify(filename: str) -> str:
     stem = Path(filename).stem
     # Lightroom/Topaz export suffixes carry no meaning on the web.
     stem = re.sub(r"-Enhanced(-NR)?$", "", stem, flags=re.IGNORECASE)
     stem = re.sub(r"[^A-Za-z0-9]+", "-", stem).strip("-").lower()
-    return stem or "photo"
+    if not stem:
+        return "photo"
+    # A bare number makes an opaque filename on disk and an awkward URL.
+    if stem.isdigit():
+        stem = f"photo-{stem}"
+    return stem
 
 
 def derivatives(src: Path, slug: str) -> dict:
@@ -175,6 +208,12 @@ def derivatives(src: Path, slug: str) -> dict:
         wanted = sorted({*GRID_WIDTHS, FULL_WIDTH, FALLBACK_WIDTH})
         # Never upscale: a narrow source caps every derivative at its own width.
         widths = [w for w in wanted if w <= source_w] or [source_w]
+        # A source that sits between two standard widths (say 1333) would
+        # otherwise be served at the next one down, throwing away detail the
+        # lightbox could have shown. Keep its own width as the largest size.
+        if source_w < FULL_WIDTH and source_w not in widths:
+            widths.append(source_w)
+            widths.sort()
 
         # The JPEG fallback rides along with whichever width sits closest to
         # FALLBACK_WIDTH, which may be the source width on a narrow photo.
@@ -279,26 +318,43 @@ def main() -> int:
     args = parser.parse_args()
 
     worklist = json.loads(WORKLIST.read_text(encoding="utf-8"))
-    photos = worklist["photos"]
     default_alt = worklist.get("defaultAlt", "Photography by Miso Marketing Group")
+
+    if args.from_dir:
+        # Ingest the folder as-is. The Drive worklist does not apply: these
+        # photos need not have come from that folder, or match its filenames.
+        source_dir = args.from_dir.expanduser()
+        if not source_dir.is_dir():
+            sys.exit(f"not a directory: {source_dir}")
+        photos = collect_from_dir(source_dir)
+        if not photos:
+            sys.exit(f"no images found in {source_dir}")
+        print(f"Importing {len(photos)} image(s) from {source_dir}\n")
+    else:
+        photos = worklist["photos"]
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     ORIGINALS.mkdir(parents=True, exist_ok=True)
 
     entries: list[dict] = []
     failures: list[str] = []
+    used_slugs: set[str] = set()
 
     for i, photo in enumerate(photos, 1):
         name = photo["file"]
         slug = slugify(name)
+        # Two sources can reduce to the same slug (photo.jpg and photo.png),
+        # and the second would silently overwrite the first's derivatives.
+        if slug in used_slugs:
+            n = 2
+            while f"{slug}-{n}" in used_slugs:
+                n += 1
+            slug = f"{slug}-{n}"
+        used_slugs.add(slug)
         print(f"[{i:2}/{len(photos)}] {name} -> {slug}")
 
         if args.from_dir:
-            src = args.from_dir.expanduser() / name
-            if not src.exists():
-                print(f"      MISSING in {args.from_dir}")
-                failures.append(name)
-                continue
+            src = photo["path"]
         else:
             src = ORIGINALS / name
             if _file_is_jpeg(src):
@@ -336,10 +392,10 @@ def main() -> int:
         )
         return 1
 
+    where = "an alt.json beside the images" if args.from_dir else "scripts/portfolio-photos.json"
     print(
-        "\nNext: give each photo real alt text in scripts/portfolio-photos.json\n"
-        "(add an \"alt\" key per entry) and re-run, so screen readers get more\n"
-        "than the generic fallback."
+        f"\nNext: give each photo real alt text in {where} and re-run, so\n"
+        "screen readers get more than the generic fallback."
     )
     return 0
 
