@@ -8,6 +8,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "import-portfolio": "python3 scripts/import_portfolio_photos.py",
     "preview": "vite preview",
     "optimize-and-upload": "node scripts/optimize-and-upload.js",
     "deploy": "npm run build && node scripts/deploy-to-s3.js"

@@ -1,5 +1,7 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "./App.css";
+import FadeUp from "./FadeUp";
+import MisoLogo from "./MisoLogo";
 
 // Import images
 import heroImg from "./assets/marketing pictures/bayarea10.jpg";
@@ -15,44 +17,6 @@ import gallery9 from "./assets/marketingSpread/DSCF2249.JPG";
 import gallery10 from "./assets/marketingSpread/earlGrey.JPG";
 import gallery11 from "./assets/marketing pictures/japan1.jpg";
 import gallery12 from "./assets/marketing pictures/socal1.jpg";
-
-// Logo SVG component using their miso mascot colors
-function MisoLogo({ size = 38 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 60 60" fill="none">
-      <circle cx="30" cy="30" r="22" stroke="#1E2A5E" strokeWidth="4" fill="none" />
-      <line x1="12" y1="48" x2="38" y2="10" stroke="#E8303F" strokeWidth="3.5" strokeLinecap="round" />
-      <line x1="16" y1="52" x2="42" y2="14" stroke="#E8303F" strokeWidth="3.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-// Intersection observer hook
-function useFadeUp() {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) el.classList.add("visible"); },
-      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-  return ref;
-}
-
-function FadeUp({ children, className = "", delay = 0 }: {
-  children: React.ReactNode; className?: string; delay?: number;
-}) {
-  const ref = useFadeUp();
-  return (
-    <div ref={ref} className={`fade-up ${className}`} style={{ transitionDelay: `${delay}s` }}>
-      {children}
-    </div>
-  );
-}
 
 // Smooth scroll helper
 function scrollTo(id: string) {
@@ -156,8 +120,14 @@ export default function App() {
           <span>Miso Marketing</span>
         </a>
         <ul id="primary-nav" className={`nav-links ${menuOpen ? "open" : ""}`}>
+          {/* Portfolio is its own page now, so it navigates instead of scrolling.
+              The gallery section below stays put as a teaser for it. */}
+          <li>
+            <a href="/portfolio.html" onClick={() => setMenuOpen(false)}>
+              Portfolio
+            </a>
+          </li>
           {[
-            { id: "gallery", label: "Portfolio" },
             { id: "about", label: "About" },
             { id: "why", label: "Why Us" },
             { id: "pricing", label: "Services" },
@@ -271,6 +241,13 @@ export default function App() {
             </div>
           ))}
         </div>
+        <FadeUp>
+          <div className="gallery-more">
+            <a className="btn-secondary gallery-more-link" href="/portfolio.html">
+              See the Full Portfolio →
+            </a>
+          </div>
+        </FadeUp>
       </section>
 
       {/* About */}
@@ -576,7 +553,7 @@ export default function App() {
           </div>
           <div className="footer-col">
             <h4>Navigate</h4>
-            <a href="#" onClick={(e) => { e.preventDefault(); scrollTo("gallery"); }}>Portfolio</a>
+            <a href="/portfolio.html">Portfolio</a>
             <a href="#" onClick={(e) => { e.preventDefault(); scrollTo("about"); }}>About</a>
             <a href="#" onClick={(e) => { e.preventDefault(); scrollTo("why"); }}>Why Us</a>
             <a href="#" onClick={(e) => { e.preventDefault(); scrollTo("pricing"); }}>Pricing</a>

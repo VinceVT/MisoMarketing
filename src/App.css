@@ -602,3 +602,12 @@ footer :focus-visible { outline-color: #ff9ba3; }
   .hero-buttons { flex-direction: column; }
   .hero-buttons a, .hero-buttons button { width: 100%; text-align: center; justify-content: center; }
 }
+
+/* Sends visitors from the home-page teaser grid to the full /portfolio.html. */
+.gallery-more { margin-top: 3rem; text-align: center; }
+/* .btn-secondary is styled for <button>; as a link it needs this to size right. */
+.gallery-more-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
