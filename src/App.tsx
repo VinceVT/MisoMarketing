@@ -80,12 +80,20 @@ const galleryImages = [
   { src: gallery12, label: "SoCal", cls: "" },
 ];
 
+const emptyForm = { name: "", email: "", restaurant: "", message: "" };
+
 export default function App() {
   const [loaded, setLoaded] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [form, setForm] = useState(emptyForm);
 
   useEffect(() => {
+    // Visitors who ask for reduced motion skip the branded loading animation.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setLoaded(true);
+      return;
+    }
     const timer = setTimeout(() => setLoaded(true), 900);
     return () => clearTimeout(timer);
   }, []);
@@ -104,10 +112,27 @@ export default function App() {
     scrollTo(id);
   };
 
+  const updateField =
+    (field: keyof typeof emptyForm) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setForm((prev) => ({ ...prev, [field]: e.target.value }));
+
+  // The form never posts anywhere. It hands a pre-filled draft to the visitor's
+  // own mail client, so nothing reaches us unless they send it themselves.
+  // This is described in /privacy.html#form — keep the two in sync.
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const subject = encodeURIComponent(`Inquiry from ${form.name} — ${form.restaurant}`);
+    const body = encodeURIComponent(
+      `Name: ${form.name}\nEmail: ${form.email}\nRestaurant: ${form.restaurant}\n\n${form.message}`
+    );
+    window.location.href = `mailto:misomarketinggroup@gmail.com?subject=${subject}&body=${body}`;
+  };
+
   return (
     <>
       {/* Preloader */}
-      <div className={`preloader ${loaded ? "hidden" : ""}`}>
+      <div className={`preloader ${loaded ? "hidden" : ""}`} aria-hidden="true">
         <div style={{ textAlign: "center" }}>
           <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
             <circle cx="30" cy="30" r="22" stroke="#E8303F" strokeWidth="4" fill="none"
@@ -130,14 +155,39 @@ export default function App() {
           <MisoLogo />
           <span>Miso Marketing</span>
         </a>
-        <ul className={`nav-links ${menuOpen ? "open" : ""}`}>
-          <li><a onClick={() => navClick("gallery")}>Portfolio</a></li>
-          <li><a onClick={() => navClick("about")}>About</a></li>
-          <li><a onClick={() => navClick("why")}>Why Us</a></li>
-          <li><a onClick={() => navClick("pricing")}>Services</a></li>
-          <li><a className="nav-cta" onClick={() => navClick("contact")}>Get Started</a></li>
+        <ul id="primary-nav" className={`nav-links ${menuOpen ? "open" : ""}`}>
+          {[
+            { id: "gallery", label: "Portfolio" },
+            { id: "about", label: "About" },
+            { id: "why", label: "Why Us" },
+            { id: "pricing", label: "Services" },
+          ].map((link) => (
+            <li key={link.id}>
+              <a
+                href={`#${link.id}`}
+                onClick={(e) => { e.preventDefault(); navClick(link.id); }}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+          <li>
+            <a
+              className="nav-cta"
+              href="#contact"
+              onClick={(e) => { e.preventDefault(); navClick("contact"); }}
+            >
+              Get Started
+            </a>
+          </li>
         </ul>
-        <button className="nav-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
+        <button
+          className="nav-toggle"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+          aria-controls="primary-nav"
+        >
           <span /><span /><span />
         </button>
       </nav>
@@ -256,7 +306,7 @@ export default function App() {
             ].map((f, i) => (
               <FadeUp key={i} delay={i * 0.1}>
                 <div className="about-feature">
-                  <div className="about-feature-icon">{f.icon}</div>
+                  <div className="about-feature-icon" aria-hidden="true">{f.icon}</div>
                   <h4>{f.title}</h4>
                   <p>{f.desc}</p>
                 </div>
@@ -419,7 +469,7 @@ export default function App() {
           ].map((feat, i) => (
             <FadeUp key={i} delay={i * 0.08}>
               <div className="web-design-card">
-                <div className="web-design-icon">{feat.icon}</div>
+                <div className="web-design-icon" aria-hidden="true">{feat.icon}</div>
                 <h4>{feat.title}</h4>
                 <p>{feat.desc}</p>
               </div>
@@ -445,46 +495,67 @@ export default function App() {
                 Get in touch with Jack & Annie and let's start turning your restaurant
                 into a social media destination.
               </p>
-              <div className="contact-form">
+              <form className="contact-form" onSubmit={handleSubmit}>
+                <label className="visually-hidden" htmlFor="contactName">Your name</label>
                 <input
                   type="text"
                   className="contact-input"
                   placeholder="Your name"
                   id="contactName"
+                  name="name"
+                  autoComplete="name"
+                  value={form.name}
+                  onChange={updateField("name")}
+                  required
                 />
+                <label className="visually-hidden" htmlFor="contactEmail">Your email address</label>
                 <input
                   type="email"
                   className="contact-input"
                   placeholder="Your email"
                   id="contactEmail"
+                  name="email"
+                  autoComplete="email"
+                  value={form.email}
+                  onChange={updateField("email")}
+                  required
                 />
+                <label className="visually-hidden" htmlFor="contactRestaurant">Restaurant name</label>
                 <input
                   type="text"
                   className="contact-input"
                   placeholder="Restaurant name"
                   id="contactRestaurant"
+                  name="restaurant"
+                  autoComplete="organization"
+                  value={form.restaurant}
+                  onChange={updateField("restaurant")}
+                  required
                 />
+                <label className="visually-hidden" htmlFor="contactMessage">
+                  Tell us about your restaurant and goals
+                </label>
                 <textarea
                   className="contact-input contact-textarea"
                   placeholder="Tell us about your restaurant and goals..."
                   id="contactMessage"
+                  name="message"
                   rows={4}
+                  value={form.message}
+                  onChange={updateField("message")}
                 />
-                <button
-                  className="cta-btn"
-                  onClick={() => {
-                    const name = (document.getElementById("contactName") as HTMLInputElement).value;
-                    const email = (document.getElementById("contactEmail") as HTMLInputElement).value;
-                    const restaurant = (document.getElementById("contactRestaurant") as HTMLInputElement).value;
-                    const message = (document.getElementById("contactMessage") as HTMLTextAreaElement).value;
-                    const subject = encodeURIComponent(`Inquiry from ${name} — ${restaurant}`);
-                    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nRestaurant: ${restaurant}\n\n${message}`);
-                    window.location.href = `mailto:misomarketinggroup@gmail.com?subject=${subject}&body=${body}`;
-                  }}
-                >
+                <button className="cta-btn" type="submit">
                   Send Message →
                 </button>
-              </div>
+                {/* Notice at collection — keep in sync with /privacy.html */}
+                <p className="form-note">
+                  This opens a draft in your own email app; nothing reaches us until you
+                  send it. We use what you send to reply and to quote the work, and we
+                  never sell it. See our <a href="/privacy.html">Privacy Policy</a>.
+                  Sending an inquiry does not create a contract &mdash; see our{" "}
+                  <a href="/terms.html#inquiries">Terms of Service</a>.
+                </p>
+              </form>
               <div className="cta-links">
                 <span>📍 San Jose, CA</span>
               </div>
@@ -522,9 +593,22 @@ export default function App() {
             <a href="https://www.tiktok.com/@itsjackandannie" target="_blank" rel="noopener noreferrer">TikTok</a>
             <a href="mailto:misomarketinggroup@gmail.com">Email Us</a>
           </div>
+          <div className="footer-col footer-legal">
+            <h4>Legal</h4>
+            <a href="/privacy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms of Service</a>
+            <a href="/accessibility.html">Accessibility</a>
+          </div>
         </div>
         <div className="footer-bottom">
-          © 2026 Miso Marketing Group. All rights reserved.
+          <p className="footer-disclaimer">
+            Figures shown on this site describe our own aggregate experience and our own
+            social media accounts. They are not typical or promised results — marketing
+            outcomes depend on factors outside our control. Package details are
+            illustrative and are not a quote; work is governed by a signed agreement.
+            See our <a href="/terms.html#noresults">Terms of Service</a>.
+          </p>
+          <p>© 2026 Miso Marketing Group. All rights reserved.</p>
         </div>
       </footer>
     </>
