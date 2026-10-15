@@ -56,9 +56,10 @@ export default tseslint.config({
 ## Portfolio page
 
 `/portfolio.html` is a second Vite entry point (see `build.rollupOptions.input`
-in `vite.config.ts`), not a client-side route — so it is a real file on S3 that
-survives a refresh and needs no bucket redirect rules. The home page keeps its
-own gallery section as a teaser and links through to it.
+in `vite.config.ts`), not a client-side route — so it builds to a real static
+file that survives a refresh or a direct visit, with no SPA rewrite rules
+needed on the host. The home page keeps its own gallery section as a teaser and
+links through to it.
 
 The photos it shows are generated, not committed by hand:
 

@@ -8,8 +8,8 @@ export default defineConfig({
   build: {
     rollupOptions: {
       // Two separately-loaded pages rather than client-side routing, so
-      // /portfolio.html is a real file on S3 that survives a refresh or a
-      // direct visit, with no bucket redirect rules to maintain.
+      // /portfolio.html is a real static file that survives a refresh or a
+      // direct visit, with no SPA rewrite rules to maintain on the host.
       // Paths are relative to the project root; keeping them that way avoids
       // pulling @types/node in just to call path.resolve in this config.
       input: {
