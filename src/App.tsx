@@ -233,7 +233,7 @@ export default function App() {
               <img src={heroImg} alt="Miso Marketing food photography" loading="eager" />
             </div>
             <div className="hero-badge">
-              <span className="stat-num">500K+</span>
+              <span className="stat-num">1M</span>
               <span className="stat-label">Monthly Views</span>
             </div>
             <div className="hero-float-card">
