@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Originals pulled by scripts/import_portfolio_photos.py — never committed.
+.portfolio-originals

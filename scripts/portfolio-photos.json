@@ -1,0 +1,40 @@
+{
+  "_comment": [
+    "Source worklist for scripts/import_portfolio_photos.py.",
+    "These are the photos in the shared Google Drive folder",
+    "https://drive.google.com/drive/folders/127A5X5RU5SpdQwvsKRkYrmVyyD1WC66I",
+    "Order here is the order they appear on /portfolio.html.",
+    "Add an 'alt' key to any entry to give that photo its own alt text;",
+    "the importer falls back to defaultAlt when 'alt' is missing."
+  ],
+  "driveFolderId": "127A5X5RU5SpdQwvsKRkYrmVyyD1WC66I",
+  "defaultAlt": "Restaurant and food photography by Miso Marketing Group",
+  "photos": [
+    { "driveId": "1XeNbeRl4MLAT4ZkYG4P1Xos5zyxjknHz", "file": "DSCF0032.jpg" },
+    { "driveId": "1AV_cbit55zgLBeag55qyre6sB-0DUqa0", "file": "DSCF5530.jpg" },
+    { "driveId": "16Y4K2bGffbBir49nZC8MSXfaj7YNtDz9", "file": "DSCF6467.jpg" },
+    { "driveId": "1Nsd4F2EWFynsVp5SYjATWpvqG6UlsTCi", "file": "DSCF1513.jpg" },
+    { "driveId": "1hpJjjDx9-zpx4xlv06ACZqPihJLFVmIn", "file": "DSCF1625.jpg" },
+    { "driveId": "14k-kYFar8Bswr6ug5GjVzhMs6EXsniHT", "file": "DSCF5747.jpg" },
+    { "driveId": "1CMfbCtdZRMApiOQ9n2t_c5zSUa4I4j5x", "file": "DSCF3185-Enhanced-NR.jpg" },
+    { "driveId": "1-dHkb95n8x1tV8DuQAwdnTd8TKzUvHq9", "file": "DSCF3278-Enhanced-NR.jpg" },
+    { "driveId": "1HshugckEvelow7v_uI5AGf3qmXDiPeyO", "file": "DSCF3350-Enhanced-NR.jpg" },
+    { "driveId": "105HjqjK_0AH0Pa3UigxZJalYww-0y6t0", "file": "DSCF3555-Enhanced-NR.jpg" },
+    { "driveId": "1_CURcqEBPbDZpV2lHtcbkPJ8Ss8_u5Sx", "file": "DSCF4020.jpg" },
+    { "driveId": "1n0IjM6HQFRYEUdRYB10Z7VUmPnxK1QLK", "file": "DSCF4037-2.jpg" },
+    { "driveId": "1oGG_OyK8EYBQRhdlLXPWhIyD9W0H4uV6", "file": "DSCF7506-Enhanced-NR.jpg" },
+    { "driveId": "1DHRP0wYSmTNtPaDnsn_IIYrSiz4q5AZm", "file": "DSCF7648-Enhanced-NR.jpg" },
+    { "driveId": "1pAqhbU5vmDefFM9ITaYr2jFbIatBV69W", "file": "DSCF7165.jpg" },
+    { "driveId": "1q-nF4mnxPGssdYzEdd03wWmL3jznJiN7", "file": "DSCF6505.jpg" },
+    { "driveId": "1lLdgeDF-uVwEnywcT01XHKS7kQyaja5t", "file": "DSCF4590.jpg" },
+    { "driveId": "1jq0DIGw6ULW8ikFu9oFQqTZlKfYwbS_9", "file": "DSCF3231.jpg" },
+    { "driveId": "1y3uNPuDvLjVH-M6WRSp1gaKPduxE7sl1", "file": "DSCF2259.jpg" },
+    { "driveId": "1cKaSX1utnsR1bGuredrrh2n3SrtWheFx", "file": "DSCF2353.jpg" },
+    { "driveId": "1zFjvVhBV88sfYV8UHT5RG3LQENTU2QBy", "file": "DSCF4351.jpg" },
+    { "driveId": "1cSfImeGKvzN28zos-9ojHj4_NWY5GMPt", "file": "DSCF4908.jpg" },
+    { "driveId": "1A7yAlpAbju8Ok0molCJnysqxbVT1ajQb", "file": "DSCF5352-Enhanced-NR.jpg" },
+    { "driveId": "1yU-tMpM7K_QUoxt5aRg8n2snccVgvgh3", "file": "DSCF2810.jpg" },
+    { "driveId": "1fzSgcVFET5hSs-K4FFnhDSaeYl4jvRVx", "file": "DSCF3912.jpg" },
+    { "driveId": "1KHH_WRpNfZD4vM3Y7jrUTRCgXrTeYh1b", "file": "DSCF2311.jpg" }
+  ]
+}

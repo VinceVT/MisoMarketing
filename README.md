@@ -52,3 +52,33 @@ export default tseslint.config({
   },
 })
 ```
+
+## Portfolio page
+
+`/portfolio.html` is a second Vite entry point (see `build.rollupOptions.input`
+in `vite.config.ts`), not a client-side route — so it builds to a real static
+file that survives a refresh or a direct visit, with no SPA rewrite rules
+needed on the host. The home page keeps its own gallery section as a teaser and
+links through to it.
+
+The photos it shows are generated, not committed by hand:
+
+```bash
+npm run import-portfolio
+```
+
+That reads the worklist in `scripts/portfolio-photos.json`, pulls each original
+from the shared Drive folder, writes web-sized WebP/JPEG derivatives into
+`public/portfolio/`, and regenerates `src/portfolioPhotos.ts`. Until it has been
+run, the page shows a short "gallery is being updated" message instead of a grid
+of broken images, so it is safe to deploy either way.
+
+If the network cannot reach Drive, download the folder by hand and point the
+importer at it instead:
+
+```bash
+python3 scripts/import_portfolio_photos.py --from-dir ~/Downloads/miso-photos
+```
+
+To give a photo real alt text, add an `"alt"` key to its entry in
+`scripts/portfolio-photos.json` and re-run the importer.
