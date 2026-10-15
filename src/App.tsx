@@ -44,6 +44,62 @@ const galleryImages = [
   { src: gallery12, label: "SoCal", cls: "" },
 ];
 
+// Website build tiers. Three one-off builds that step up in scope, plus a
+// monthly care plan — a restaurant's real ongoing need is menu and hours
+// changes, which is what makes a site go stale when nobody owns it.
+// No prices here, matching the marketing plans: every job is quoted.
+const webPlans = [
+  {
+    tag: "One Page", title: "Starter Site",
+    contract: "One-time build", featured: false,
+    items: [
+      "Single-page site, everything in one scroll",
+      "Menu, hours, location & contact",
+      "Mobile-first and fast on a phone",
+      "Google Business Profile set up",
+      "Tap-to-call and tap-for-directions",
+      "1 round of revisions",
+    ],
+  },
+  {
+    tag: "Most Popular", title: "Full Website",
+    contract: "One-time build", featured: true,
+    items: [
+      "Up to 5 pages — home, menu, about, gallery, contact",
+      "Reservation and ordering links",
+      "Your photography built into the design",
+      "Local SEO so you turn up in nearby searches",
+      "Instagram feed on the page",
+      "2 rounds of revisions",
+    ],
+  },
+  {
+    tag: "Premium", title: "Premium Build",
+    contract: "One-time build", featured: false,
+    items: [
+      "Everything in Full Website",
+      "Online ordering built in, not just linked",
+      "Events, catering & private dining pages",
+      "Email signup for your mailing list",
+      "Multiple locations supported",
+      "Analytics set up so you can see what works",
+      "3 rounds of revisions",
+    ],
+  },
+  {
+    tag: "Monthly", title: "Care Plan",
+    contract: "Month to month, cancel anytime", featured: false,
+    items: [
+      "Hosting, domain & security certificate handled",
+      "Unlimited menu and hours updates",
+      "Backups and security monitoring",
+      "Monthly report on visitors and clicks",
+      "Priority support when something breaks",
+      "Add to any build above",
+    ],
+  },
+];
+
 const emptyForm = { name: "", email: "", restaurant: "", message: "" };
 
 export default function App() {
@@ -473,6 +529,36 @@ export default function App() {
             </FadeUp>
           ))}
         </div>
+
+        {/* Website packages. Kept in their own grid rather than merged into the
+            marketing plans above: a one-off build is a different decision from
+            a monthly retainer, and eight cards side by side compare nothing. */}
+        <div className="web-plans">
+          <FadeUp><h3>Website packages.</h3></FadeUp>
+          <FadeUp>
+            <p className="web-plans-lead">
+              Built once, built properly — then kept current if you want us to.
+            </p>
+          </FadeUp>
+          <div className="pricing-grid">
+            {webPlans.map((plan, i) => (
+              <FadeUp key={i} delay={i * 0.1}>
+                <div className={`pricing-card ${plan.featured ? "featured" : ""}`}>
+                  <span className="pricing-tag">{plan.tag}</span>
+                  <div className="pricing-title">{plan.title}</div>
+                  <div className="pricing-contract">{plan.contract}</div>
+                  <ul className="pricing-list">
+                    {plan.items.map((item, j) => <li key={j}>{item}</li>)}
+                  </ul>
+                  <button className="pricing-btn" onClick={() => scrollTo("contact")}>
+                    Inquire
+                  </button>
+                </div>
+              </FadeUp>
+            ))}
+          </div>
+        </div>
+
         <FadeUp>
           <div style={{ textAlign: "center", marginTop: "3rem" }}>
             <button className="btn-primary" onClick={() => scrollTo("contact")}>
