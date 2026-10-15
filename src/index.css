@@ -4,7 +4,13 @@
 
 :root {
   --navy: #1E2A5E;
+  /* Brand red. At 4.05:1 on cream and 4.26:1 behind white text it misses the
+     WCAG AA 4.5:1 minimum, so it is reserved for large display text and for
+     purely decorative graphics. */
   --red: #E8303F;
+  /* Near-identical red that clears 4.5:1 both on cream (4.7:1) and behind
+     white text (5.0:1). Use this for small red text and for red buttons. */
+  --red-deep: #D62839;
   --cream: #FFF8F0;
   --dark-cream: #F5EDE3;
   --white: #FFFFFF;
@@ -14,6 +20,33 @@
 }
 
 html { scroll-behavior: smooth; font-size: 16px; }
+
+/* Always show keyboard focus. WCAG 2.4.7 Focus Visible. */
+:focus-visible {
+  outline: 3px solid var(--red-deep);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Available to screen readers, invisible on screen. */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%);
+  white-space: nowrap; border: 0;
+}
+
+/* WCAG 2.3.3 / 2.2.2 — honour the OS "reduce motion" setting. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 body {
   font-family: 'Outfit', sans-serif;
   color: var(--charcoal);
