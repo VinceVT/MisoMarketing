@@ -310,14 +310,19 @@ nav.scrolled {
 
 /* ═══════ PRICING ═══════ */
 .pricing { padding: 8rem 3rem; max-width: 1400px; margin: 0 auto; }
-.pricing > h2 {
+/* These were written as direct-child selectors, but FadeUp wraps each heading
+   in its own div, so they matched nothing: the heading fell back to a browser
+   default h2 and the lead paragraph lost the 4rem that separates it from the
+   grid. Matched as descendants instead — the cards below use .pricing-title
+   and list items, so no h2 or p of theirs is caught by this. */
+.pricing h2 {
   font-family: 'DM Serif Display', serif;
   font-size: clamp(2rem, 3.5vw, 3.2rem);
   color: var(--navy); margin-bottom: 1rem; text-align: center;
 }
-.pricing > p {
+.pricing p {
   text-align: center; color: #777; font-size: 1.05rem;
-  max-width: 500px; margin: 0 auto 4rem; font-weight: 300;
+  max-width: 500px; margin: 0 auto 5rem; font-weight: 300;
 }
 .pricing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
 .pricing-card {
@@ -419,6 +424,24 @@ nav.scrolled {
 .web-design-card p {
   font-size: .88rem; color: #666; line-height: 1.7; font-weight: 300;
 }
+
+/* ═══════ WEBSITE PACKAGES ═══════
+   Reuses .pricing-card from the marketing plans, so the two price grids read
+   as the same component in two places. */
+.web-plans { margin-top: 6rem; max-width: 1400px; margin-left: auto; margin-right: auto; }
+.web-plans h3 {
+  font-family: 'DM Serif Display', serif;
+  font-weight: 400;
+  font-size: clamp(1.6rem, 2.8vw, 2.3rem);
+  color: var(--navy);
+  margin-bottom: .75rem;
+}
+.web-plans-lead {
+  max-width: 520px; margin: 0 auto 3.5rem;
+  color: #777; font-weight: 300; line-height: 1.7; font-size: 1.05rem;
+}
+/* The section centres its text; the cards are read as lists, so they are not. */
+.web-plans .pricing-grid { text-align: left; }
 
 /* ═══════ CTA ═══════ */
 .cta-section { padding: 8rem 3rem; text-align: center; }
