@@ -64,8 +64,17 @@ links through to it.
 The photos it shows are generated, not committed by hand:
 
 ```bash
+python3 -m venv .venv          # first time only
+source .venv/bin/activate
+pip install Pillow             # first time only
+
 npm run import-portfolio
 ```
+
+Pillow is a library, so install it into a virtualenv as above. Homebrew and
+system Pythons refuse a bare `pip install` (PEP 668) and their error suggests
+pipx, but pipx isolates *applications* — a library installed that way will not
+be importable by the script.
 
 That reads the worklist in `scripts/portfolio-photos.json`, pulls each original
 from the shared Drive folder, writes web-sized WebP/JPEG derivatives into

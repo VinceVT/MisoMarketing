@@ -41,7 +41,18 @@ from pathlib import Path
 try:
     from PIL import Image, ImageOps
 except ImportError:  # pragma: no cover
-    sys.exit("Pillow is required: pip install Pillow")
+    # Homebrew and system Pythons are usually "externally managed" (PEP 668),
+    # so a bare `pip install` is refused and its error suggests pipx. pipx is
+    # for applications, not libraries, so installing Pillow that way leaves it
+    # invisible here. A virtualenv is the route that actually works.
+    sys.exit(
+        "Pillow is required.\n\n"
+        "    python3 -m venv .venv\n"
+        "    source .venv/bin/activate\n"
+        "    pip install Pillow\n\n"
+        "then re-run this script. (Do not use pipx: it isolates applications, "
+        "so a library installed with it cannot be imported here.)"
+    )
 
 ROOT = Path(__file__).resolve().parent.parent
 WORKLIST = ROOT / "scripts" / "portfolio-photos.json"

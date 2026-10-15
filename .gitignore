@@ -25,3 +25,6 @@ dist-ssr
 
 # Originals pulled by scripts/import_portfolio_photos.py — never committed.
 .portfolio-originals
+
+# Python virtualenv for scripts/import_portfolio_photos.py
+.venv
