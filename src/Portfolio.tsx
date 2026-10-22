@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./Portfolio.css";
 import FadeUp from "./FadeUp";
+import ContactSection from "./ContactSection";
 import { portfolioPhotos } from "./portfolioPhotos";
 
 /** Tells the grid how wide a thumbnail actually renders, so the browser can
@@ -163,7 +164,10 @@ export default function PortfolioView({ onGoHome }: { onGoHome: (id: string) => 
               </p>
             </FadeUp>
             <FadeUp>
-              <button className="btn-primary portfolio-header-cta" onClick={() => onGoHome("contact")}>
+              <button
+                className="btn-primary portfolio-header-cta"
+                onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+              >
                 Work With Us →
               </button>
             </FadeUp>
@@ -225,16 +229,9 @@ export default function PortfolioView({ onGoHome }: { onGoHome: (id: string) => 
           )}
         </section>
 
-        {/* Closing CTA */}
-        <section className="portfolio-cta">
-          <FadeUp>
-            <h2>Like what you see?</h2>
-            <p>
-              Let&rsquo;s make your restaurant look this good. Get in touch with Jack &amp; Annie.
-            </p>
-            <button className="btn-primary" onClick={() => onGoHome("contact")}>Get Started →</button>
-          </FadeUp>
-        </section>
+        {/* The same contact block the home view ends on, so a visitor who has
+            just scrolled the whole gallery can write to us without leaving it. */}
+        <ContactSection />
       </main>
 
       {openIndex !== null && (
