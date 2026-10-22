@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import "./App.css";
 import FadeUp from "./FadeUp";
 import MisoLogo from "./MisoLogo";
+import PortfolioView from "./Portfolio";
 
 // Import images
 import heroImg from "./assets/marketing pictures/bayarea10.jpg";
@@ -102,7 +103,15 @@ const webPlans = [
 
 const emptyForm = { name: "", email: "", restaurant: "", message: "" };
 
+/** The portfolio is a view of this same page, not a second document: switching
+ *  to it loads nothing. #portfolio in the hash keeps it refreshable, shareable
+ *  and reachable with the back button, without a server rewrite rule. */
+function viewFromHash() {
+  return window.location.hash === "#portfolio" ? "portfolio" : "home";
+}
+
 export default function App() {
+  const [view, setView] = useState<"home" | "portfolio">(viewFromHash);
   const [loaded, setLoaded] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -118,7 +127,40 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Visitors coming from /portfolio.html arrive on a URL like /#contact. The
+  // The back and forward buttons move between the two views.
+  useEffect(() => {
+    const onPop = () => setView(viewFromHash());
+    window.addEventListener("popstate", onPop);
+    window.addEventListener("hashchange", onPop);
+    return () => {
+      window.removeEventListener("popstate", onPop);
+      window.removeEventListener("hashchange", onPop);
+    };
+  }, []);
+
+  const showPortfolio = useCallback(() => {
+    setMenuOpen(false);
+    if (window.location.hash !== "#portfolio") {
+      window.history.pushState(null, "", "#portfolio");
+    }
+    setView("portfolio");
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, []);
+
+  // Returning to the home view, optionally landing on one of its sections.
+  // The scroll waits a frame: the home markup is not mounted until React has
+  // re-rendered, so the target does not exist yet at this point.
+  const showHome = useCallback((id?: string) => {
+    setMenuOpen(false);
+    window.history.pushState(null, "", id ? `#${id}` : window.location.pathname);
+    setView("home");
+    requestAnimationFrame(() => {
+      if (!id) { window.scrollTo({ top: 0, behavior: "auto" }); return; }
+      document.getElementById(id)?.scrollIntoView({ behavior: "instant", block: "start" });
+    });
+  }, []);
+
+  // Visitors arriving on a URL like /#contact. The
   // browser does its own fragment scroll while parsing, before React has
   // rendered anything, so the target does not exist yet and the page just sits
   // at the top. Scroll to it once the section is actually on the page.
@@ -146,11 +188,6 @@ export default function App() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
-
-  const navClick = (id: string) => {
-    setMenuOpen(false);
-    scrollTo(id);
-  };
 
   const updateField =
     (field: keyof typeof emptyForm) =>
@@ -191,15 +228,19 @@ export default function App() {
 
       {/* Nav */}
       <nav className={scrolled ? "scrolled" : ""}>
-        <a className="nav-brand" href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}>
+        <a className="nav-brand" href="/" onClick={(e) => { e.preventDefault(); showHome(); }}>
           <MisoLogo />
           <span>Miso Marketing</span>
         </a>
         <ul id="primary-nav" className={`nav-links ${menuOpen ? "open" : ""}`}>
-          {/* Portfolio is its own page now, so it navigates instead of scrolling.
+          {/* Portfolio swaps the view on this same page — nothing is fetched.
               The gallery section below stays put as a teaser for it. */}
           <li>
-            <a href="/portfolio.html" onClick={() => setMenuOpen(false)}>
+            <a
+              href="#portfolio"
+              aria-current={view === "portfolio" ? "page" : undefined}
+              onClick={(e) => { e.preventDefault(); showPortfolio(); }}
+            >
               Portfolio
             </a>
           </li>
@@ -211,7 +252,7 @@ export default function App() {
             <li key={link.id}>
               <a
                 href={`#${link.id}`}
-                onClick={(e) => { e.preventDefault(); navClick(link.id); }}
+                onClick={(e) => { e.preventDefault(); showHome(link.id); }}
               >
                 {link.label}
               </a>
@@ -221,7 +262,7 @@ export default function App() {
             <a
               className="nav-cta"
               href="#contact"
-              onClick={(e) => { e.preventDefault(); navClick("contact"); }}
+              onClick={(e) => { e.preventDefault(); showHome("contact"); }}
             >
               Get Started
             </a>
@@ -238,6 +279,10 @@ export default function App() {
         </button>
       </nav>
 
+      {view === "portfolio" ? (
+        <PortfolioView onGoHome={showHome} />
+      ) : (
+        <>
       {/* Hero */}
       <section className="hero">
         <div className="hero-bg" />
@@ -319,9 +364,9 @@ export default function App() {
         </div>
         <FadeUp>
           <div className="gallery-more">
-            <a className="btn-secondary gallery-more-link" href="/portfolio.html">
+            <button className="btn-secondary gallery-more-link" onClick={showPortfolio}>
               See the Full Portfolio →
-            </a>
+            </button>
           </div>
         </FadeUp>
       </section>
@@ -646,6 +691,8 @@ export default function App() {
           </div>
         </div>
       </section>
+        </>
+      )}
 
       {/* Footer */}
       <footer>
@@ -659,7 +706,7 @@ export default function App() {
           </div>
           <div className="footer-col">
             <h4>Navigate</h4>
-            <a href="/portfolio.html">Portfolio</a>
+            <a href="#portfolio" onClick={(e) => { e.preventDefault(); showPortfolio(); }}>Portfolio</a>
             <a href="#" onClick={(e) => { e.preventDefault(); scrollTo("about"); }}>About</a>
             <a href="#" onClick={(e) => { e.preventDefault(); scrollTo("why"); }}>Why Us</a>
             <a href="#" onClick={(e) => { e.preventDefault(); scrollTo("pricing"); }}>Pricing</a>
