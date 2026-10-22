@@ -1,17 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import "./App.css";
 import "./Portfolio.css";
 import FadeUp from "./FadeUp";
-import MisoLogo from "./MisoLogo";
 import { portfolioPhotos } from "./portfolioPhotos";
-
-// Sections on the home page. From here they need the leading slash, otherwise
-// a bare "#about" would just look for that id on this page and do nothing.
-const homeLinks = [
-  { href: "/#about", label: "About" },
-  { href: "/#why", label: "Why Us" },
-  { href: "/#pricing", label: "Services" },
-];
 
 /** Tells the grid how wide a thumbnail actually renders, so the browser can
  *  pick the smallest candidate that still looks sharp. Mirrors Portfolio.css. */
@@ -118,20 +108,15 @@ function Lightbox({
   );
 }
 
-export default function Portfolio() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+/** The portfolio as a view within the single page. App owns the nav and the
+ *  footer, so this renders only what changes: header, grid, lightbox, CTA.
+ *  `onGoHome` switches back to the home view and scrolls to a section there. */
+export default function PortfolioView({ onGoHome }: { onGoHome: (id: string) => void }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   // Where to send focus back to once the lightbox closes.
   const triggerRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const lastTrigger = useRef<number | null>(null);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   const open = (i: number) => {
     lastTrigger.current = i;
@@ -158,40 +143,6 @@ export default function Portfolio() {
 
   return (
     <>
-      {/* Nav — same furniture as the home page, pointing back at it. */}
-      <nav className={scrolled ? "scrolled" : ""}>
-        <a className="nav-brand" href="/">
-          <MisoLogo />
-          <span>Miso Marketing</span>
-        </a>
-        <ul id="primary-nav" className={`nav-links ${menuOpen ? "open" : ""}`}>
-          <li>
-            <a href="/portfolio.html" aria-current="page" onClick={() => setMenuOpen(false)}>
-              Portfolio
-            </a>
-          </li>
-          {homeLinks.map((link) => (
-            <li key={link.href}>
-              <a href={link.href} onClick={() => setMenuOpen(false)}>{link.label}</a>
-            </li>
-          ))}
-          <li>
-            <a className="nav-cta" href="/#contact" onClick={() => setMenuOpen(false)}>
-              Get Started
-            </a>
-          </li>
-        </ul>
-        <button
-          className="nav-toggle"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-          aria-controls="primary-nav"
-        >
-          <span /><span /><span />
-        </button>
-      </nav>
-
       <main>
         {/* Header */}
         <header className="portfolio-header">
@@ -212,9 +163,9 @@ export default function Portfolio() {
               </p>
             </FadeUp>
             <FadeUp>
-              <a className="btn-primary portfolio-header-cta" href="/#contact">
+              <button className="btn-primary portfolio-header-cta" onClick={() => onGoHome("contact")}>
                 Work With Us →
-              </a>
+              </button>
             </FadeUp>
           </div>
         </header>
@@ -261,7 +212,10 @@ export default function Portfolio() {
               <h2>Our gallery is being updated.</h2>
               <p>
                 We&rsquo;re putting together a fresh set of our latest restaurant work.
-                In the meantime, the <a href="/#gallery">highlights are on our home page</a>,
+                In the meantime, the{" "}
+                <button className="portfolio-empty-link" onClick={() => onGoHome("gallery")}>
+                  highlights are on our home page
+                </button>,
                 and there is plenty more on{" "}
                 <a href="https://www.instagram.com/itsjackandannie" target="_blank" rel="noopener noreferrer">
                   Instagram
@@ -278,49 +232,10 @@ export default function Portfolio() {
             <p>
               Let&rsquo;s make your restaurant look this good. Get in touch with Jack &amp; Annie.
             </p>
-            <a className="btn-primary" href="/#contact">Get Started →</a>
+            <button className="btn-primary" onClick={() => onGoHome("contact")}>Get Started →</button>
           </FadeUp>
         </section>
       </main>
-
-      {/* Footer */}
-      <footer>
-        <div className="footer-inner">
-          <div>
-            <div className="footer-brand">Miso Marketing</div>
-            <p className="footer-desc">
-              Bay Area social media marketing for restaurants. Founded by Jack &amp; Annie —
-              two foodies on a mission to help restaurants thrive online.
-            </p>
-          </div>
-          <div className="footer-col">
-            <h4>Navigate</h4>
-            <a href="/portfolio.html">Portfolio</a>
-            <a href="/#about">About</a>
-            <a href="/#why">Why Us</a>
-            <a href="/#pricing">Services</a>
-          </div>
-          <div className="footer-col">
-            <h4>Connect</h4>
-            <a href="https://www.instagram.com/itsjackandannie" target="_blank" rel="noopener noreferrer">Instagram</a>
-            <a href="https://www.tiktok.com/@itsjackandannie" target="_blank" rel="noopener noreferrer">TikTok</a>
-            <a href="mailto:misomarketinggroup@gmail.com">Email Us</a>
-          </div>
-          <div className="footer-col footer-legal">
-            <h4>Legal</h4>
-            <a href="/privacy.html">Privacy Policy</a>
-            <a href="/terms.html">Terms of Service</a>
-            <a href="/accessibility.html">Accessibility</a>
-          </div>
-        </div>
-        <div className="footer-bottom">
-          <p className="footer-disclaimer">
-            Photography on this page is our own work, shot for our clients and shown
-            with their permission. Please don&rsquo;t reuse it without asking us first.
-          </p>
-          <p>© 2026 Miso Marketing Group. All rights reserved.</p>
-        </div>
-      </footer>
 
       {openIndex !== null && (
         <Lightbox index={openIndex} onClose={close} onStep={step} />
