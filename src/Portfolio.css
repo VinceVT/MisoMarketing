@@ -199,31 +199,6 @@
 /* The red focus ring disappears against the near-black overlay. */
 .lightbox :focus-visible { outline-color: #ff9ba3; }
 
-/* ═══════ CLOSING CTA ═══════ */
-.portfolio-cta {
-  padding: 5rem 3rem 6rem;
-  background: var(--dark-cream);
-  text-align: center;
-}
-.portfolio-cta h2 {
-  font-family: 'DM Serif Display', serif;
-  font-size: clamp(1.9rem, 4vw, 2.8rem);
-  font-weight: 400;
-  color: var(--navy);
-  margin-bottom: .75rem;
-}
-.portfolio-cta p {
-  max-width: 44ch;
-  margin: 0 auto 2rem;
-  line-height: 1.75;
-  color: #4a4a5e;
-}
-.portfolio-cta .btn-primary {
-  display: inline-flex;
-  align-items: center;
-  text-decoration: none;
-}
-
 /* ═══════ RESPONSIVE ═══════ */
 @media (max-width: 1024px) {
   .portfolio-grid { columns: 2 280px; }
@@ -231,7 +206,6 @@
 @media (max-width: 768px) {
   .portfolio-header { padding: 8.5rem 1.5rem 3rem; }
   .portfolio-grid-section { padding: 1.5rem 1.5rem 4rem; }
-  .portfolio-cta { padding: 4rem 1.5rem; }
   .lightbox { padding: 1rem; gap: .5rem; }
   .lightbox-nav { width: 44px; height: 44px; font-size: 1.6rem; }
   .lightbox-close { top: .75rem; right: .75rem; }
